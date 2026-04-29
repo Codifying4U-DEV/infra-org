@@ -29,7 +29,7 @@ export class ProjectFactory {
       folderId,
       billingAccount: this.billingAccount,
       labels: definition.labels,
-      deletionPolicy: "PREVENT",
+      deletionPolicy: definition.deletionPolicy,
     }, this.opts);
   }
 

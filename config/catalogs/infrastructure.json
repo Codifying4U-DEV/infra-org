@@ -35,7 +35,7 @@
     {
       "key": "coreDns",
       "resourceName": "project-core-dns",
-      "id": "core-dns",
+      "id": "c4u-core-dns",
       "folder": "shared",
       "labels": {
         "env": "shared",
@@ -46,7 +46,7 @@
     {
       "key": "coreCicd",
       "resourceName": "project-core-cicd",
-      "id": "core-cicd",
+      "id": "c4u-core-cicd",
       "folder": "shared",
       "labels": {
         "env": "shared",
@@ -57,7 +57,7 @@
     {
       "key": "coreSec",
       "resourceName": "project-core-sec",
-      "id": "core-sec",
+      "id": "c4u-core-sec",
       "folder": "shared",
       "labels": {
         "env": "shared",
@@ -68,7 +68,7 @@
     {
       "key": "sbxMain",
       "resourceName": "project-sbx-main",
-      "id": "sbx-main",
+      "id": "c4u-sbx-main",
       "folder": "sandbox",
       "labels": {
         "env": "sbx",
