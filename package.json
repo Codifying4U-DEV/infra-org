@@ -1,4 +1,19 @@
 {
   "name": "infra-org",
-  "version": "0.1.0"
+  "version": "0.1.0",
+  "private": true,
+  "description": "GCP organization baseline infrastructure for codifying4u.com.",
+  "scripts": {
+    "preview": "NODE_OPTIONS='-r ./register-aliases.js' pulumi preview",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@pulumi/gcp": "^9.21.0",
+    "@pulumi/pulumi": "^3.0.0",
+    "zod": "^4.3.6"
+  },
+  "devDependencies": {
+    "ts-node": "^10.9.2",
+    "typescript": "^5.0.0"
+  }
 }

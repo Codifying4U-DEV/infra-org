@@ -1,52 +1,87 @@
 # infra-org
 
-## Release workflow
+Pulumi TypeScript project for the codifying4u.com GCP organization baseline.
 
-This repository uses GitHub Flow. All changes should enter through pull
-requests into `master`.
+## Scope
 
-Release Please runs on every push to `master`. When it finds releasable
-Conventional Commits, it creates or updates a release pull request.
+Creates:
 
-The release pull request is responsible for preparing the next release version,
-including the Node package version and changelog updates handled by Release
-Please.
+- Organization folders
+- Shared core projects
+- Sandbox project
+- IAM bindings using Google Groups only
+- Bootstrap service accounts in `core-cicd`
 
-When the release pull request is reviewed and merged into `master`, Release
-Please publishes the GitHub Release for that version.
+Service account role assignments can be declared in the catalog for future use,
+but this stack does not create those IAM bindings yet.
 
-### Commit format
+Does not create:
 
-Use Conventional Commits so Release Please can determine the next version:
+- DNS resources
+- Squarespace resources
+- Terraform resources
+- `eplanner-dev`
+- `eplanner-prd`
+- CI/CD pipelines
 
-- `feat:` creates a minor release.
-- `fix:` creates a patch release.
-- `chore:` tracks maintenance changes.
-- `docs:` tracks documentation-only changes.
-
-Use a breaking-change footer when a change requires a major release:
-
-```text
-BREAKING CHANGE: describe the incompatible change
-```
-
-### Examples
-
-Valid commit messages:
+## Structure
 
 ```text
-feat: add core project module
-fix: correct folder parent reference
-chore: update pulumi dependencies
-docs: update bootstrap instructions
+config/catalogs/   JSON infrastructure catalog, Zod schema, and catalog validation
+lib/               Pulumi config
+modules/           Pulumi resource factories and organization component
+types/             TypeScript domain contracts
+index.ts           Pulumi entrypoint
 ```
 
-### Release action
+## Validation
 
-The release workflow is defined in
-`.github/workflows/release-please.yml` and uses:
+```bash
+npm install
+npm run typecheck
+node -r ./register-aliases.js -r ts-node/register -e "const { validateOrganizationCatalogs } = require('@/config/catalogs'); validateOrganizationCatalogs();"
+```
 
-```yaml
-googleapis/release-please-action@v4
-release-type: node
+## Pulumi
+
+Initialize the stack:
+
+```bash
+export PULUMI_CONFIG_PASSPHRASE="<PASSPHRASE>"
+pulumi stack init org --secrets-provider=passphrase --non-interactive
+```
+
+Set required config:
+
+```bash
+pulumi config set orgId <ORG_ID> --stack org --non-interactive
+pulumi config set billingAccount <BILLING_ACCOUNT_ID> --stack org --non-interactive
+pulumi config set gcp:project core-state --stack org --non-interactive
+```
+
+Preview only:
+
+```bash
+npm run preview -- --stack org
+```
+
+Do not run:
+
+```bash
+pulumi up
+```
+
+## Catalog
+
+The declarative infrastructure source is:
+
+```text
+config/catalogs/infrastructure.json
+```
+
+It is parsed and validated by:
+
+```text
+config/catalogs/catalog.ts
+config/catalogs/validator.ts
 ```
