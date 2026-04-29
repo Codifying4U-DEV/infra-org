@@ -8,6 +8,7 @@ env:
 steps:
   - label: ":node: Install dependencies"
     command: |
+      nvm use 20
       node --version
       npm --version
       npm ci
