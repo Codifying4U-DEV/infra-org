@@ -1,0 +1,55 @@
+env:
+  ORG_ID: "956538764816"
+  BILLING_ACCOUNT: "01FEA6-3E0351-67649D"
+
+  GCP_PROJECT: "core-state"
+  PULUMI_STATE_BUCKET: "c4u-pulumi-state"
+
+steps:
+  - label: ":node: Install dependencies"
+    command: |
+      nvm use 20
+      node --version
+      npm --version
+      npm ci
+    agents:
+      queue: c4u
+
+  - label: ":typescript: Type check"
+    command: |
+      npm run typecheck
+    agents:
+      queue: c4u
+
+  - label: ":mag: Pulumi Preview"
+    command: |
+      pulumi login gs://${PULUMI_STATE_BUCKET}
+      pulumi stack select org
+
+      pulumi config set orgId "$ORG_ID"
+      pulumi config set billingAccount "$BILLING_ACCOUNT"
+      pulumi config set gcp:project "$GCP_PROJECT"
+
+      pulumi preview
+    agents:
+      queue: c4u
+
+  - wait
+
+  - block: ":rocket: Apply infrastructure?"
+    branches: "master"
+    prompt: "Confirm Pulumi deployment"
+
+  - label: ":rocket: Pulumi Up"
+    branches: "master"
+    command: |
+      pulumi login gs://${PULUMI_STATE_BUCKET}
+      pulumi stack select org
+
+      pulumi config set orgId "$ORG_ID"
+      pulumi config set billingAccount "$BILLING_ACCOUNT"
+      pulumi config set gcp:project "$GCP_PROJECT"
+
+      pulumi up --yes
+    agents:
+      queue: c4u

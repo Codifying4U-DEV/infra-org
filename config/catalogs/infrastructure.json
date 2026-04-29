@@ -66,6 +66,17 @@
       }
     },
     {
+      "key": "gcpFoundation",
+      "resourceName": "project-gcp-foundation",
+      "id": "c4u-gcp-foundation",
+      "folder": "shared",
+      "labels": {
+        "env": "shared",
+        "product": "core",
+        "owner": "platform"
+      }
+    },
+    {
       "key": "sbxMain",
       "resourceName": "project-sbx-main",
       "id": "c4u-sbx-main",
@@ -99,7 +110,7 @@
       {
         "group": "devops",
         "role": "roles/editor",
-        "projectKeys": ["coreDns", "coreCicd", "coreSec", "sbxMain"],
+        "projectKeys": ["coreDns", "coreCicd", "coreSec", "sbxMain", "gcpFoundation"],
         "suffix": "devops-editor"
       },
       {
@@ -113,7 +124,7 @@
   "serviceAccounts": [
     {
       "key": "orgInfra",
-      "accountId": "sa-bk-org-infra",
+      "accountId": "sa-bk-c4u-gcp-foundation",
       "displayName": "Bootstrap organization infrastructure",
       "project": "coreCicd",
       "roles": []
