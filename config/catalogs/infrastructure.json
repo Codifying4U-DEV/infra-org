@@ -1,0 +1,136 @@
+{
+  "groups": {
+    "admins": "group:gcp-admins@codifying4u.com",
+    "devops": "group:gcp-devops@codifying4u.com",
+    "devs": "group:gcp-devs@codifying4u.com",
+    "readonly": "group:gcp-readonly@codifying4u.com"
+  },
+  "folders": [
+    {
+      "key": "shared",
+      "resourceName": "folder-00-shared",
+      "displayName": "00-shared",
+      "parent": "organization"
+    },
+    {
+      "key": "sandbox",
+      "resourceName": "folder-10-sandbox",
+      "displayName": "10-sandbox",
+      "parent": "organization"
+    },
+    {
+      "key": "products",
+      "resourceName": "folder-20-products",
+      "displayName": "20-products",
+      "parent": "organization"
+    },
+    {
+      "key": "eplanner",
+      "resourceName": "folder-eplanner",
+      "displayName": "eplanner",
+      "parent": "products"
+    }
+  ],
+  "projects": [
+    {
+      "key": "coreDns",
+      "resourceName": "project-core-dns",
+      "id": "core-dns",
+      "folder": "shared",
+      "labels": {
+        "env": "shared",
+        "product": "core",
+        "owner": "platform"
+      }
+    },
+    {
+      "key": "coreCicd",
+      "resourceName": "project-core-cicd",
+      "id": "core-cicd",
+      "folder": "shared",
+      "labels": {
+        "env": "shared",
+        "product": "core",
+        "owner": "platform"
+      }
+    },
+    {
+      "key": "coreSec",
+      "resourceName": "project-core-sec",
+      "id": "core-sec",
+      "folder": "shared",
+      "labels": {
+        "env": "shared",
+        "product": "core",
+        "owner": "platform"
+      }
+    },
+    {
+      "key": "sbxMain",
+      "resourceName": "project-sbx-main",
+      "id": "sbx-main",
+      "folder": "sandbox",
+      "labels": {
+        "env": "sbx",
+        "product": "sbx",
+        "owner": "platform"
+      }
+    }
+  ],
+  "iam": {
+    "organization": [
+      {
+        "group": "admins",
+        "role": "roles/resourcemanager.organizationAdmin",
+        "resourceName": "org-admins-organization-admin"
+      },
+      {
+        "group": "admins",
+        "role": "roles/billing.admin",
+        "resourceName": "org-admins-billing-admin"
+      },
+      {
+        "group": "readonly",
+        "role": "roles/viewer",
+        "resourceName": "org-readonly-viewer"
+      }
+    ],
+    "projects": [
+      {
+        "group": "devops",
+        "role": "roles/editor",
+        "projectKeys": ["coreDns", "coreCicd", "coreSec", "sbxMain"],
+        "suffix": "devops-editor"
+      },
+      {
+        "group": "devs",
+        "role": "roles/editor",
+        "projectKeys": ["sbxMain"],
+        "suffix": "devs-editor"
+      }
+    ]
+  },
+  "serviceAccounts": [
+    {
+      "key": "orgInfra",
+      "accountId": "sa-bk-org-infra",
+      "displayName": "Bootstrap organization infrastructure",
+      "project": "coreCicd",
+      "roles": []
+    },
+    {
+      "key": "eplannerInfra",
+      "accountId": "sa-bk-eplanner-infra",
+      "displayName": "Bootstrap eplanner infrastructure",
+      "project": "coreCicd",
+      "roles": []
+    },
+    {
+      "key": "eplannerDeploy",
+      "accountId": "sa-bk-eplanner-deploy",
+      "displayName": "Deploy eplanner workloads",
+      "project": "coreCicd",
+      "roles": []
+    }
+  ]
+}
