@@ -1,0 +1,7 @@
+name: infra
+runtime:
+  name: nodejs
+  options:
+    typescript: true
+    nodeargs: "--require ./register-aliases.js"
+description: GCP organization baseline infrastructure for codifying4u.com.
