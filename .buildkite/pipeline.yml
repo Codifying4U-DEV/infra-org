@@ -16,6 +16,10 @@ steps:
 
   - label: ":typescript: Type check"
     command: |
+      ls -la
+      ls -la node_modules
+      ls -la node_modules/.bin
+      which tsc || true
       npm run typecheck
     agents:
       queue: c4u
