@@ -26,6 +26,7 @@ const organizationCatalogSchema = z.object({
     id: z.string(),
     folder: z.string(),
     labels: labelsSchema,
+    billingEnabled: z.boolean().default(true),
     deletionPolicy: z.enum(["DELETE", "PREVENT", "ABANDON"]).default("PREVENT"),
   })),
   iam: z.object({

@@ -32,6 +32,7 @@ export class CatalogOrganizationDefinitionFactory implements OrganizationDefinit
       projectId: project.id,
       displayName: project.id,
       folderKey: project.folder,
+      billingEnabled: project.billingEnabled,
       labels: project.labels,
       deletionPolicy: project.deletionPolicy,
     }));

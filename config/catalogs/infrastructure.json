@@ -37,6 +37,7 @@
       "resourceName": "project-core-dns",
       "id": "c4u-core-dns",
       "folder": "shared",
+      "billingEnabled": false,
       "labels": {
         "env": "shared",
         "product": "core",
@@ -59,6 +60,7 @@
       "resourceName": "project-core-sec",
       "id": "c4u-core-sec",
       "folder": "shared",
+      "billingEnabled": false,
       "labels": {
         "env": "shared",
         "product": "core",
@@ -81,6 +83,7 @@
       "resourceName": "project-sbx-main",
       "id": "c4u-sbx-main",
       "folder": "sandbox",
+      "billingEnabled": false,
       "labels": {
         "env": "sbx",
         "product": "sbx",
@@ -127,7 +130,12 @@
       "accountId": "sa-bk-c4u-gcp-foundation",
       "displayName": "Bootstrap organization infrastructure",
       "project": "coreCicd",
-      "roles": []
+      "roles": [
+        {
+          "project": "coreCicd",
+          "role": "roles/iam.workloadIdentityUser"
+        }
+      ]
     },
     {
       "key": "eplannerInfra",

@@ -27,7 +27,7 @@ export class ProjectFactory {
       projectId: definition.projectId,
       name: definition.displayName,
       folderId,
-      billingAccount: this.billingAccount,
+      billingAccount: definition.billingEnabled ? this.billingAccount : "",
       labels: definition.labels,
       deletionPolicy: definition.deletionPolicy,
     }, this.opts);

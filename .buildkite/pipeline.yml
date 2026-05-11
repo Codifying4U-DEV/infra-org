@@ -28,7 +28,7 @@ steps:
     plugins:
       - gcp-workload-identity-federation#v1.5.0:
           audience: "//iam.googleapis.com/projects/448408505730/locations/global/workloadIdentityPools/buildkite-c4u-pipeline/providers/buildkite"
-          service-account: "sa-bk-org-infra@c4u-core-cicd.iam.gserviceaccount.com"
+          service-account: "sa-bk-c4u-gcp-foundation@c4u-core-cicd.iam.gserviceaccount.com"
 
   - wait
 

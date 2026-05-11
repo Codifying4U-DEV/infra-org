@@ -9,6 +9,7 @@ export type ProjectDefinition = {
   projectId: string;
   displayName: string;
   folderKey: FolderKey;
+  billingEnabled: boolean;
   deletionPolicy: "DELETE" | "PREVENT" | "ABANDON";
   labels: Record<string, string>;
 };
