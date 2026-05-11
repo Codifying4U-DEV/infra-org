@@ -36,6 +36,10 @@ export type OrganizationDefinitionFactory = {
     groups: OrganizationArgs["groups"],
   ): IamBinding[];
   createServiceAccountDefinitions(): ServiceAccountDefinition[];
+  createServiceAccountIamBindings(
+    projects: OrganizationProjects,
+    serviceAccounts: OrganizationServiceAccounts,
+  ): IamBinding[];
 };
 
 export type { FolderDefinition, FolderKey, FolderParentKey, OrganizationFolders, RootParentKey } from "./folders";

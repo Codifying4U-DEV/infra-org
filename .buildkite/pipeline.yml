@@ -1,0 +1,51 @@
+env:
+  ORG_ID: "956538764816"
+  BILLING_ACCOUNT: "01FEA6-3E0351-67649D"
+
+  GCP_PROJECT: "core-state"
+  PULUMI_STATE_BUCKET: "c4u-pulumi-state"
+
+steps:
+  - label: ":gcp: Authenticate with Workload Identity Federation"
+    command: |
+      echo "Credentials are located at \$GOOGLE_APPLICATION_CREDENTIALS"
+    plugins:
+      - gcp-workload-identity-federation#v1.5.0:
+          audience: "//iam.googleapis.com/projects/448408505730/locations/global/workloadIdentityPools/buildkite-c4u-pipeline/providers/buildkite"
+          service-account: "sa-bk-org-infra@c4u-core-cicd.iam.gserviceaccount.com"
+  - label: ":pulumi: Pulumi Preview"
+    command: |
+      npm ci
+      npm run typecheck
+      pulumi login gs://${PULUMI_STATE_BUCKET}
+      pulumi stack select org
+      pulumi config set orgId "$ORG_ID"
+      pulumi config set billingAccount "$BILLING_ACCOUNT"
+      pulumi config set gcp:project "$GCP_PROJECT"
+      pulumi preview
+    agents:
+      queue: c4u
+    plugins:
+      - gcp-workload-identity-federation#v1.5.0:
+          audience: "//iam.googleapis.com/projects/448408505730/locations/global/workloadIdentityPools/buildkite-c4u-pipeline/providers/buildkite"
+          service-account: "sa-bk-c4u-gcp-foundation@c4u-core-cicd.iam.gserviceaccount.com"
+
+  - wait
+
+  - block: ":rocket: Apply infrastructure?"
+    branches: "master"
+    prompt: "Confirm Pulumi deployment"
+
+  - label: ":rocket: Pulumi Up"
+    branches: "master"
+    command: |
+      pulumi login gs://${PULUMI_STATE_BUCKET}
+      pulumi stack select org
+
+      pulumi config set orgId "$ORG_ID"
+      pulumi config set billingAccount "$BILLING_ACCOUNT"
+      pulumi config set gcp:project "$GCP_PROJECT"
+
+      pulumi up --yes
+    agents:
+      queue: c4u

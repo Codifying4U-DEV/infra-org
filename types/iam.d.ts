@@ -10,7 +10,7 @@ export type IamRole = string;
 export type BaseIamBinding = {
   resourceName: string;
   role: IamRole;
-  member: string;
+  member: pulumi.Input<string>;
 };
 
 export type IamBinding =

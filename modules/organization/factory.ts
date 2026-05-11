@@ -2,7 +2,11 @@ import * as pulumi from "@pulumi/pulumi";
 import type { FolderDefinition } from "@/types/folders";
 import type { IamBinding } from "@/types/iam";
 import type { OrganizationProjects, ProjectDefinition, ProjectKey } from "@/types/projects";
-import type { ServiceAccountDefinition } from "@/types/serviceAccounts";
+import type {
+  OrganizationServiceAccounts,
+  ServiceAccountDefinition,
+  ServiceAccountKey,
+} from "@/types/serviceAccounts";
 import type {
   OrganizationArgs,
   OrganizationDefinitionFactory,
@@ -32,6 +36,7 @@ export class CatalogOrganizationDefinitionFactory implements OrganizationDefinit
       projectId: project.id,
       displayName: project.id,
       folderKey: project.folder,
+      billingEnabled: project.billingEnabled,
       labels: project.labels,
       deletionPolicy: project.deletionPolicy,
     }));
@@ -108,5 +113,38 @@ export class CatalogOrganizationDefinitionFactory implements OrganizationDefinit
         role: role.role,
       })),
     }));
+  }
+
+  createServiceAccountIamBindings(
+    builtProjects: OrganizationProjects,
+    serviceAccounts: OrganizationServiceAccounts,
+  ): IamBinding[] {
+    return SERVICE_ACCOUNT_CATALOG.flatMap((account) => {
+      const serviceAccount = this.requireServiceAccount(serviceAccounts, account.key);
+
+      return account.roles.map((role) => ({
+        scope: "project" as const,
+        resourceName: `${account.accountId}-${this.requireProjectCatalogEntry(role.project).resourceName}-${this.roleSuffix(role.role)}`,
+        project: this.requireProject(builtProjects, role.project).projectId,
+        role: role.role,
+        member: pulumi.interpolate`serviceAccount:${serviceAccount.email}`,
+      }));
+    });
+  }
+
+  private requireServiceAccount(
+    serviceAccounts: OrganizationServiceAccounts,
+    serviceAccountKey: ServiceAccountKey,
+  ) {
+    const serviceAccount = serviceAccounts[serviceAccountKey];
+    if (!serviceAccount) {
+      throw new Error(`Service account "${serviceAccountKey}" must be built before creating IAM bindings.`);
+    }
+
+    return serviceAccount;
+  }
+
+  private roleSuffix(role: string): string {
+    return role.replace(/^roles\//, "").replace(/[^a-zA-Z0-9]+/g, "-").toLowerCase();
   }
 }
