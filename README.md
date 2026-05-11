@@ -11,9 +11,7 @@ Creates:
 - Sandbox project
 - IAM bindings using Google Groups only
 - Bootstrap service accounts in `core-cicd`
-
-Service account role assignments can be declared in the catalog for future use,
-but this stack does not create those IAM bindings yet.
+- Project IAM bindings for service accounts declared in the catalog
 
 Does not create:
 

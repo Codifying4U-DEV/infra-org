@@ -62,6 +62,11 @@ export class PulumiOrganizationBuilder implements OrganizationBuilder {
       this.requireProjects(),
     );
 
+    this.iamFactory.createMany(this.factory.createServiceAccountIamBindings(
+      this.requireProjects(),
+      this.serviceAccounts,
+    ));
+
     return this;
   }
 
